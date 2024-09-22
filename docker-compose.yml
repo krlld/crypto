@@ -1,0 +1,29 @@
+services:
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    environment:
+      - SERVER_PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_FLYWAY_PASSWORD=1234
+    depends_on:
+      - auth-db
+    ports:
+      - "8081:8081"
+
+  auth-db:
+    image: postgres:15-alpine
+    container_name: auth-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./auth-db-volume:/var/lib/postgresql/data
+
+volumes:
+  auth-db-volume:
