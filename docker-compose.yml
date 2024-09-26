@@ -1,4 +1,25 @@
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.7.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.7.1
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
   auth-service:
     build: ./auth-service
     container_name: auth-service
@@ -11,13 +32,26 @@ services:
     depends_on:
       - auth-db
     ports:
-      - "8081:8081"
+      - 8081:8081
+
+  file-service:
+    build: ./file-service
+    container_name: file-service
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://file-db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+    depends_on:
+      - file-db
+    ports:
+      - 8082:8082
 
   auth-db:
     image: postgres:15-alpine
     container_name: auth-db
     ports:
-      - "5433:5432"
+      - 5433:5432
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=1234
@@ -25,5 +59,18 @@ services:
     volumes:
       - ./auth-db-volume:/var/lib/postgresql/data
 
+  file-db:
+    image: postgres:15-alpine
+    container_name: file-db
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./file-db-volume:/var/lib/postgresql/data
+
 volumes:
   auth-db-volume:
+  file-db-volume:
