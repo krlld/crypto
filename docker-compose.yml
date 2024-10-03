@@ -1,24 +1,28 @@
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.7.1
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 22181:2181
+      - 2181:2181
 
   kafka:
     image: confluentinc/cp-kafka:7.7.1
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
+      - 9092:9092
       - 29092:29092
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   auth-service:
     build: ./auth-service
@@ -47,6 +51,19 @@ services:
     ports:
       - 8082:8082
 
+  data-analyze-service:
+    build: ./data-analyze
+    container_name: data-analyze-service
+    environment:
+      - SERVER_PORT=8083
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://data-analyze-db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+    depends_on:
+      - data-analyze-db
+    ports:
+      - 8083:8083
+
   auth-db:
     image: postgres:15-alpine
     container_name: auth-db
@@ -71,6 +88,19 @@ services:
     volumes:
       - ./file-db-volume:/var/lib/postgresql/data
 
+  data-analyze-db:
+    image: postgres:15-alpine
+    container_name: data-analyze-db
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./data-analyze-db:/var/lib/postgresql/data
+
 volumes:
   auth-db-volume:
   file-db-volume:
+  data-analyze-db:
