@@ -20,11 +20,13 @@ class AuthenticationController(
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody @Valid authenticationDto: AuthenticationDto): String =
-        authenticationService.register(authenticationDto)
+    fun register(@RequestBody @Valid authenticationDto: AuthenticationDto): String {
+        return authenticationService.register(authenticationDto)
+    }
 
     @PostMapping("/authenticate")
     @ResponseStatus(HttpStatus.OK)
-    fun authenticate(@RequestBody @Valid authenticationDto: AuthenticationDto): String =
-        authenticationService.authenticate(authenticationDto)
+    fun authenticate(@RequestBody @Valid authenticationDto: AuthenticationDto): String {
+        return authenticationService.authenticate(authenticationDto)
+    }
 }

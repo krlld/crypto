@@ -2,10 +2,17 @@ package by.kirilldikun.crypto.commons.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -13,16 +20,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfiguration(
-    //val defaultAuthenticationTokenFilter: DefaultAuthenticationTokenFilter
+    val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    val userDetailsService: UserDetailsService,
 ) {
 
     @Bean
-    @Throws(Exception::class)
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
+    fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
+        return httpSecurity
             .csrf { it.disable() }
-            .sessionManagement { configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            //.addFilterBefore(defaultAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
+    }
+
+    @Bean
+    fun authenticationProvider(): AuthenticationProvider {
+        val daoAuthenticationProvider = DaoAuthenticationProvider()
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService)
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder())
+        return daoAuthenticationProvider
+    }
+
+    @Bean
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager
+    }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 }

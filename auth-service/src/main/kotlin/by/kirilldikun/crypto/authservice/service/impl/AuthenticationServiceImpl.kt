@@ -1,10 +1,12 @@
 package by.kirilldikun.crypto.authservice.service.impl
 
-import by.kirilldikun.crypto.authservice.config.JwtParser
 import by.kirilldikun.crypto.authservice.dto.AuthenticationDto
 import by.kirilldikun.crypto.authservice.model.User
 import by.kirilldikun.crypto.authservice.repository.UserRepository
 import by.kirilldikun.crypto.authservice.service.AuthenticationService
+import by.kirilldikun.crypto.commons.config.CustomUserDetails
+import by.kirilldikun.crypto.commons.config.JwtParser
+import by.kirilldikun.crypto.commons.exception.ConflictException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -25,8 +27,7 @@ class AuthenticationServiceImpl(
     override fun register(authenticationDto: AuthenticationDto): String {
         val foundUser = userRepository.findByEmail(authenticationDto.email)
         if (foundUser != null) {
-            // TODO: create specific exception
-            throw Exception("User with email ${authenticationDto.email} already exists")
+            throw ConflictException("User with email ${authenticationDto.email} already exists")
         }
         val newUser = User(
             email = authenticationDto.email,
@@ -35,10 +36,11 @@ class AuthenticationServiceImpl(
         userRepository.save(newUser)
 
         return jwtParser.generateToken(
-            org.springframework.security.core.userdetails.User(
-                newUser.email,
-                newUser.password,
-                emptyList()
+            CustomUserDetails(
+                id = newUser.id!!,
+                username = newUser.email,
+                password = newUser.password,
+                authorities = emptySet()
             )
         )
     }
@@ -52,7 +54,7 @@ class AuthenticationServiceImpl(
             )
         )
 
-        val user = userDetailsService.loadUserByUsername(authenticationDto.email)
+        val user = userDetailsService.loadUserByUsername(authenticationDto.email) as CustomUserDetails
         return jwtParser.generateToken(user)
     }
 }

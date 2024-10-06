@@ -32,7 +32,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
-      - SPRING_FLYWAY_PASSWORD=1234
     depends_on:
       - auth-db
     ports:

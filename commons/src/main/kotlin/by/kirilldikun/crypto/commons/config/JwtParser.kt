@@ -1,22 +1,17 @@
-package by.kirilldikun.crypto.authservice.config
+package by.kirilldikun.crypto.commons.config
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import java.time.Duration
 import java.util.Date
 import javax.crypto.SecretKey
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 
 @Component
 class JwtParser(
-    @Value("\${jwt.secret-key}")
-    val secretKey: String,
-    @Value("\${jwt.expiration}")
-    val expiration: Duration
+    val jwtProperties: JwtProperties
 ) {
 
     fun extractUsername(token: String): String {
@@ -37,18 +32,19 @@ class JwtParser(
             .payload
     }
 
-    fun generateToken(userDetails: UserDetails): String {
-        return generateToken(HashMap(), userDetails)
+    fun generateToken(customUserDetails: CustomUserDetails): String {
+        return generateToken(HashMap(), customUserDetails)
     }
 
-    fun generateToken(extraClaims: Map<String, Any>, userDetails: UserDetails): String {
+    fun generateToken(extraClaims: Map<String, Any>, customUserDetails: CustomUserDetails): String {
         return Jwts
             .builder()
             .claims()
             .add(extraClaims)
-            .subject(userDetails.username)
+            .subject(customUserDetails.username)
+            .add("userId", customUserDetails.getId())
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + expiration.toMillis()))
+            .expiration(Date(System.currentTimeMillis() + jwtProperties.expiration.toMillis()))
             .and()
             .signWith(getSignedKey(), Jwts.SIG.HS256)
             .compact()
@@ -68,7 +64,7 @@ class JwtParser(
     }
 
     private fun getSignedKey(): SecretKey {
-        val keyBytes = Decoders.BASE64.decode(secretKey)
+        val keyBytes = Decoders.BASE64.decode(jwtProperties.secret)
         return Keys.hmacShaKeyFor(keyBytes)
     }
 }

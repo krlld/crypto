@@ -1,5 +1,6 @@
 package by.kirilldikun.crypto.dataanalyzeservice.service.impl
 
+import by.kirilldikun.crypto.commons.util.TokenHelper
 import by.kirilldikun.crypto.dataanalyzeservice.dto.ReportDto
 import by.kirilldikun.crypto.dataanalyzeservice.mapper.ReportMapper
 import by.kirilldikun.crypto.dataanalyzeservice.producer.ReportCreationProducer
@@ -11,11 +12,13 @@ import org.springframework.stereotype.Service
 class ReportServiceImpl(
     val reportRepository: ReportRepository,
     val reportMapper: ReportMapper,
-    val reportCreationProducer: ReportCreationProducer
+    val reportCreationProducer: ReportCreationProducer,
+    val tokenHelper: TokenHelper
 ) : ReportService {
 
     override fun generateReport(reportDto: ReportDto): ReportDto {
-        val reportDtoWithUserId = reportDto.copy(userId = 0)
+        val userId = tokenHelper.getUserId()
+        val reportDtoWithUserId = reportDto.copy(userId = userId)
         val savedReport = simpleSave(reportDtoWithUserId)
         reportCreationProducer.send(savedReport)
         return savedReport
