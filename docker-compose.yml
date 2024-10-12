@@ -19,13 +19,20 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  data-analyze-project:
+    build: ./data_analyze_project
+    container_name: data-analyze-project
+    environment:
+      - KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+
   auth-service:
-    build: ./auth-service
+    build:
+      dockerfile: auth-service.Dockerfile
     container_name: auth-service
     environment:
       - SERVER_PORT=8081
@@ -38,7 +45,8 @@ services:
       - 8081:8081
 
   file-service:
-    build: ./file-service
+    build:
+      dockerfile: file-service.Dockerfile
     container_name: file-service
     environment:
       - SERVER_PORT=8082
@@ -51,13 +59,15 @@ services:
       - 8082:8082
 
   data-analyze-service:
-    build: ./data-analyze
+    build:
+      dockerfile: data-analyze-service.Dockerfile
     container_name: data-analyze-service
     environment:
       - SERVER_PORT=8083
       - SPRING_DATASOURCE_URL=jdbc:postgresql://data-analyze-db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - data-analyze-db
     ports:
@@ -97,9 +107,9 @@ services:
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=postgres
     volumes:
-      - ./data-analyze-db:/var/lib/postgresql/data
+      - ./data-analyze-db-volume:/var/lib/postgresql/data
 
 volumes:
   auth-db-volume:
   file-db-volume:
-  data-analyze-db:
+  data-analyze-db-volume:
