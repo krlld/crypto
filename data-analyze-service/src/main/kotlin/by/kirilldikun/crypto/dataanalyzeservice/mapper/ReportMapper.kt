@@ -15,6 +15,7 @@ class ReportMapper : Mapper<Report, ReportDto> {
             sourceFileId = e.sourceFileId,
             resultFileId = e.resultFileId,
             userId = e.userId,
+            isPublic = e.isPublic,
             createdAtDate = e.createdAtDate
         )
     }
@@ -25,7 +26,8 @@ class ReportMapper : Mapper<Report, ReportDto> {
             title = d.title,
             sourceFileId = d.sourceFileId,
             resultFileId = d.resultFileId,
-            userId = d.userId!!
+            userId = d.userId!!,
+            isPublic = d.isPublic
         )
     }
 }

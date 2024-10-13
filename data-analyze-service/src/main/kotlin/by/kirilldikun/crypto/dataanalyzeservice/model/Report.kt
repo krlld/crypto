@@ -25,6 +25,8 @@ class Report(
 
     val userId: Long = 0,
 
+    val isPublic: Boolean = false,
+
     @CreatedDate
     @Column(updatable = false)
     val createdAtDate: LocalDate = LocalDate.now()

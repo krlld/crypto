@@ -16,5 +16,7 @@ data class ReportDto(
 
     val userId: Long? = null,
 
+    val isPublic: Boolean,
+
     val createdAtDate: LocalDate? = null
 )
