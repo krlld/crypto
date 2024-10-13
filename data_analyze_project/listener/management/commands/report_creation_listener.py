@@ -7,47 +7,39 @@ from confluent_kafka import KafkaError
 from confluent_kafka import KafkaException
 from dotenv import load_dotenv
 
-load_dotenv()
+from .create_report import create_report
 
-# We want to run thread in an infinite loop
 running = True
-conf = {'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP-SERVERS', 'localhost:9092'),
-        'auto.offset.reset': 'smallest',
-        'group.id': "user_group"}
 
-# Topic
+load_dotenv()
+conf = {'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP-SERVERS', 'localhost:29092'),
+        'auto.offset.reset': 'smallest',
+        'group.id': "data-analyze-project"}
+
 topic = 'report-creation-topic'
 
 
 class ReportCreationListener(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        # Create consumer
         self.consumer = Consumer(conf)
 
     def run(self):
         print('Inside Report Creation Listener :  Created Listener ')
         try:
-            # Subcribe to topic
             self.consumer.subscribe([topic])
             while running:
-                # Poll for message
                 msg = self.consumer.poll(timeout=1.0)
-                if msg is None: continue
-                # Handle Error
+                if msg is None:
+                    continue
                 if msg.error():
-                    if msg.error().code() == KafkaError._PARTITION_EOF:
-                        # End of partition event
+                    if msg.error().code() == KafkaError.PARTITION_EOF:
                         sys.stderr.write('%% %s [%d] reached end at offset %d\n' %
                                          (msg.topic(), msg.partition(), msg.offset()))
                 elif msg.error():
                     raise KafkaException(msg.error())
                 else:
-                    # Handle Message
-                    print('---------> Got message Sending email.....')
                     message = json.loads(msg.value().decode('utf-8'))
-                    # In Real world, write email sending logic here
-                    print(message)
+                    create_report(message)
         finally:
-            # Close down consumer to commit final offsets.
             self.consumer.close()

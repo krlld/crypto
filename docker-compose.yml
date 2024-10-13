@@ -14,7 +14,6 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - 9092:9092
       - 29092:29092
     environment:
       KAFKA_BROKER_ID: 1
@@ -29,6 +28,7 @@ services:
     container_name: data-analyze-project
     environment:
       - KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SERVICE_FILE_URL=http://file-service:8082/api/file-service
 
   auth-service:
     build:
@@ -53,6 +53,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://file-db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
+      - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - file-db
     ports:
@@ -68,6 +69,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - data-analyze-db
     ports:

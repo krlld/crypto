@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-@ConditionalOnProperty("auth.url")
-@FeignClient(name = "userFeignClient", url = "\${auth.url}")
+@ConditionalOnProperty("service.auth.url")
+@FeignClient(name = "userFeignClient", url = "\${service.auth.url}")
 interface UserFeignClient {
 
     @GetMapping("/users")
