@@ -10,7 +10,11 @@ interface ReportService {
 
     fun findUserReports(pageable: Pageable): Page<ReportDto>
 
+    fun findById(reportId: Long): ReportDto
+
     fun save(reportDto: ReportDto): ReportDto
 
     fun generateReport(reportDto: ReportDto): ReportDto
+
+    fun changeFavoriteStatus(reportId: Long)
 }

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -37,5 +39,11 @@ class ReportController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun generateReport(@RequestBody @Valid reportDto: ReportDto): ReportDto {
         return reportService.generateReport(reportDto)
+    }
+
+    @PatchMapping("/{reportId}/favorite")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun changeFavoriteStatus(@PathVariable reportId: Long) {
+        reportService.changeFavoriteStatus(reportId)
     }
 }
