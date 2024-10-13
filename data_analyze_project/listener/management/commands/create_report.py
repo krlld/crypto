@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import requests
 from io import BytesIO
 
+from .report_sending_produser import ReportSendingProducer
+
 load_dotenv()
 service_file_url = os.getenv('SERVICE_FILE_URL', 'http://localhost:8082')
 
@@ -38,3 +40,12 @@ def create_report(json):
     upload_url = f'{service_file_url}/files'
     files = {'file': ('plot.png', img_buf, 'multipart/form-data')}
     response = requests.post(upload_url, files=files)
+
+    if response.status_code != 200:
+        return
+
+    plt.close()
+
+    json['resultFileId'] = response.json().get('id')
+    producer = ReportSendingProducer()
+    producer.publish(json)

@@ -16,7 +16,7 @@ conf = {'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP-SERVERS', 'localhost:290
         'auto.offset.reset': 'smallest',
         'group.id': "data-analyze-project"}
 
-topic = 'report-creation-topic'
+report_creation_topic = 'report-creation-topic'
 
 
 class ReportCreationListener(threading.Thread):
@@ -27,7 +27,7 @@ class ReportCreationListener(threading.Thread):
     def run(self):
         print('Inside Report Creation Listener :  Created Listener ')
         try:
-            self.consumer.subscribe([topic])
+            self.consumer.subscribe([report_creation_topic])
             while running:
                 msg = self.consumer.poll(timeout=1.0)
                 if msg is None:
