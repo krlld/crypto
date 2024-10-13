@@ -16,6 +16,10 @@ class ReportServiceImpl(
     val tokenHelper: TokenHelper
 ) : ReportService {
 
+    override fun save(reportDto: ReportDto): ReportDto {
+        return simpleSave(reportDto)
+    }
+
     override fun generateReport(reportDto: ReportDto): ReportDto {
         val userId = tokenHelper.getUserId()
         val reportDtoWithUserId = reportDto.copy(userId = userId)
