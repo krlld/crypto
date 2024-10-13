@@ -23,8 +23,8 @@ class ReportController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun findAll(pageable: Pageable): Page<ReportDto> {
-        return reportService.findAll(pageable)
+    fun findAllPublic(pageable: Pageable): Page<ReportDto> {
+        return reportService.findAllPublic(pageable)
     }
 
     @GetMapping("/my-reports")

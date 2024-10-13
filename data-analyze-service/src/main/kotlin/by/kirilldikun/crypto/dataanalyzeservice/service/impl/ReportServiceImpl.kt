@@ -20,7 +20,7 @@ class ReportServiceImpl(
 ) : ReportService {
 
     @Transactional(readOnly = true)
-    override fun findAll(pageable: Pageable): Page<ReportDto> {
+    override fun findAllPublic(pageable: Pageable): Page<ReportDto> {
         return reportRepository.findAllPublic(pageable)
             .map { reportMapper.toDto(it) }
     }

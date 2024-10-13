@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable
 
 interface ReportService {
 
-    fun findAll(pageable: Pageable): Page<ReportDto>
+    fun findAllPublic(pageable: Pageable): Page<ReportDto>
 
     fun findUserReports(pageable: Pageable): Page<ReportDto>
 
