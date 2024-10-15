@@ -4,5 +4,6 @@ CREATE TABLE data_analyze_service_favorite_reports
     user_id   BIGINT NOT NULL,
     report_id BIGINT NOT NULL,
     UNIQUE (user_id, report_id),
+    FOREIGN KEY (user_id) REFERENCES data_analyze_service_user_profiles (id),
     FOREIGN KEY (report_id) REFERENCES data_analyze_service_reports (id)
 );
