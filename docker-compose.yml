@@ -88,6 +88,22 @@ services:
     ports:
       - 8083:8083
 
+  external-api-service:
+    build:
+      dockerfile: external-api-service.Dockerfile
+    container_name: external-api-service
+    environment:
+      - SERVER_PORT=8084
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://external-api-db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
+    depends_on:
+      - external-api-db
+    ports:
+      - 8084:8083
+
   auth-db:
     image: postgres:15-alpine
     container_name: auth-db
@@ -124,7 +140,20 @@ services:
     volumes:
       - ./data-analyze-db-volume:/var/lib/postgresql/data
 
+  external-api-db:
+    image: postgres:15-alpine
+    container_name: external-api-db
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./external-api-db-volume:/var/lib/postgresql/data
+
 volumes:
   auth-db-volume:
   file-db-volume:
   data-analyze-db-volume:
+  external-api-db-volume:
