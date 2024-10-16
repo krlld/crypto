@@ -2,7 +2,7 @@ package by.kirilldikun.crypto.externalapiservice.coincup.service
 
 interface FavoriteCurrencyService {
 
-    fun findAllUserCurrencyIds(): List<String>
+    fun findAllUserCurrencyIds(userId: Long): List<String>
 
-    fun changeFavoriteStatus(currencyId: String)
+    fun changeFavoriteStatus(userId: Long, currencyId: String)
 }
