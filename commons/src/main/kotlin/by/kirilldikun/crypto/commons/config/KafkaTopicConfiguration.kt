@@ -19,4 +19,9 @@ class KafkaTopicConfiguration {
     fun reportSendingTopic(): NewTopic {
         return TopicBuilder.name("report-sending-topic").build()
     }
+
+    @Bean
+    fun emailSendingTopic(): NewTopic {
+        return TopicBuilder.name("email-sending-topic").build()
+    }
 }

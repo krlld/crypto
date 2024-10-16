@@ -1,15 +1,17 @@
-package by.kirilldikun.crypto.commons.service
+package by.kirilldikun.crypto.commons.service.impl
 
 import by.kirilldikun.crypto.commons.config.CustomUserDetails
 import by.kirilldikun.crypto.commons.feign.UserFeignClient
 import by.kirilldikun.crypto.commons.util.ExceptionParser
 import feign.FeignException
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
+@ConditionalOnBean(UserFeignClient::class)
 @ConditionalOnMissingBean(UserDetailsService::class)
 class UserDetailsServiceImpl(
     val userFeignClient: UserFeignClient,

@@ -102,7 +102,18 @@ services:
     depends_on:
       - external-api-db
     ports:
-      - 8084:8083
+      - 8084:8084
+
+  notification-service:
+    build:
+      dockerfile: notification-service.Dockerfile
+    container_name: notification-service
+    environment:
+      - SERVER_PORT=8085
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    env_file: notification.env
+    ports:
+      - 8085:8085
 
   auth-db:
     image: postgres:15-alpine

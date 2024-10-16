@@ -6,6 +6,7 @@ import io.jsonwebtoken.MalformedJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.servlet.HandlerExceptionResolver
 
 @Component
+@ConditionalOnBean(UserDetailsService::class)
 class JwtAuthenticationFilter(
     val jwtParser: JwtParser,
     val userDetailsService: UserDetailsService,
