@@ -1,5 +1,6 @@
 package by.kirilldikun.crypto.externalapiservice.coincup.dto
 
+import by.kirilldikun.crypto.externalapiservice.coincup.model.ComparisonType
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 
@@ -12,6 +13,8 @@ data class SubscriptionToPriceDto(
     val userId: Long,
 
     val currencyId: String,
+
+    val comparisonType: ComparisonType,
 
     val price: BigDecimal
 )

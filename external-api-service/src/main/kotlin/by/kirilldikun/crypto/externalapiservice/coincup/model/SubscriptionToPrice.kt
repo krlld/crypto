@@ -1,6 +1,8 @@
 package by.kirilldikun.crypto.externalapiservice.coincup.model
 
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -18,6 +20,9 @@ class SubscriptionToPrice(
     val userId: Long,
 
     val currencyId: String,
+
+    @Enumerated(EnumType.STRING)
+    val comparisonType: ComparisonType,
 
     val price: BigDecimal
 )

@@ -13,6 +13,7 @@ class SubscribedPriceMapper : Mapper<SubscriptionToPrice, SubscriptionToPriceDto
             id = e.id,
             userId = e.userId,
             currencyId = e.currencyId,
+            comparisonType = e.comparisonType,
             price = e.price
         )
     }
@@ -22,6 +23,7 @@ class SubscribedPriceMapper : Mapper<SubscriptionToPrice, SubscriptionToPriceDto
             id = d.id,
             userId = d.userId,
             currencyId = d.currencyId,
+            comparisonType = d.comparisonType,
             price = d.price
         )
     }
