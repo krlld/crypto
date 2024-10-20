@@ -111,6 +111,7 @@ services:
     environment:
       - SERVER_PORT=8085
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     env_file: notification-service.env
     ports:
       - 8085:8085

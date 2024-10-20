@@ -10,5 +10,7 @@ by.kirilldikun.crypto.commons.exception.handler.GlobalExceptionHandler
 by.kirilldikun.crypto.commons.producer.EmailSendingProducer
 by.kirilldikun.crypto.commons.service.impl.EmailServiceImpl
 by.kirilldikun.crypto.commons.service.impl.UserDetailsServiceImpl
+by.kirilldikun.crypto.commons.service.impl.UserServiceImpl
 by.kirilldikun.crypto.commons.util.ExceptionParser
+by.kirilldikun.crypto.commons.util.MessageLocaleHelper
 by.kirilldikun.crypto.commons.util.TokenHelper

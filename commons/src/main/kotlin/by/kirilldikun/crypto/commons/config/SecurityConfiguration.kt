@@ -1,6 +1,5 @@
 package by.kirilldikun.crypto.commons.config
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -20,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@ConditionalOnBean(JwtAuthenticationFilter::class, UserDetailsService::class)
 class SecurityConfiguration(
     val jwtAuthenticationFilter: JwtAuthenticationFilter,
     val userDetailsService: UserDetailsService,

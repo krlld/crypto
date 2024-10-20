@@ -4,5 +4,12 @@ import by.kirilldikun.crypto.commons.dto.EmailDto
 
 interface EmailService {
 
-    fun send(emailDto: EmailDto)
+    fun send(emailDtos: List<EmailDto>)
+
+    fun createNotifications(
+        userIds: List<Long>,
+        key: String,
+        titleArgs: () -> Map<String, String> = { mapOf() },
+        bodyArgs: () -> Map<String, String> = { mapOf() }
+    ): List<EmailDto>
 }

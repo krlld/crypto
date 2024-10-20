@@ -10,8 +10,8 @@ data class EmailDto(
     @JsonProperty("subject")
     val subject: String,
 
-    @JsonProperty("to")
-    val to: List<String>,
+    @JsonProperty("toId")
+    val toId: Long,
 
     @JsonProperty("attachments")
     val attachments: List<Pair<String, String>> = emptyList()
