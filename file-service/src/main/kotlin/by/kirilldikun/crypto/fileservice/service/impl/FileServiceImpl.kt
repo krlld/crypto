@@ -1,5 +1,6 @@
 package by.kirilldikun.crypto.fileservice.service.impl
 
+import by.kirilldikun.crypto.commons.exception.NotFoundException
 import by.kirilldikun.crypto.fileservice.dto.FileMetadataDto
 import by.kirilldikun.crypto.fileservice.model.FileMetadata
 import by.kirilldikun.crypto.fileservice.repository.FileMetadataRepository
@@ -23,7 +24,7 @@ class FileServiceImpl(
 
     override fun getById(uuid: UUID): Pair<FileMetadataDto, Resource> {
         val fileMetadata = fileMetadataRepository.findById(uuid)
-            .orElseThrow { Exception("File with id: $uuid not found") }  // TODO: change exception type
+            .orElseThrow { NotFoundException("File with id: $uuid not found") }
         val filename = "${fileMetadata.id}.${getFileExtension(fileMetadata.originalFilename)}"
         val file = getFile(filename)
         return Pair(toDto(fileMetadata), file)
