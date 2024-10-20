@@ -17,3 +17,4 @@ class ReportSendingProducer:
         print('Inside Report Sending Producer: Sending to Kafka: ')
         print(body)
         self.producer.produce(report_sending_topic, value=json.dumps(body))
+        self.producer.flush()

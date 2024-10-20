@@ -22,7 +22,8 @@ class EmailServiceImpl(
         userIds: List<Long>,
         key: String,
         titleArgs: () -> Map<String, String>,
-        bodyArgs: () -> Map<String, String>
+        bodyArgs: () -> Map<String, String>,
+        attachments: List<String>
     ): List<EmailDto> {
         return userIds.map {
             EmailDto(
@@ -34,7 +35,8 @@ class EmailServiceImpl(
                 text = messageLocaleHelper.getLocalizedMessage(
                     key = "$key.body",
                     args = bodyArgs()
-                )
+                ),
+                attachments = attachments
             )
         }
     }

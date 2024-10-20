@@ -10,6 +10,7 @@ interface EmailService {
         userIds: List<Long>,
         key: String,
         titleArgs: () -> Map<String, String> = { mapOf() },
-        bodyArgs: () -> Map<String, String> = { mapOf() }
+        bodyArgs: () -> Map<String, String> = { mapOf() },
+        attachments: List<String> = emptyList()
     ): List<EmailDto>
 }

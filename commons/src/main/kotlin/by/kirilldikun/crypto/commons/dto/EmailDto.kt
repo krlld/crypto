@@ -14,5 +14,5 @@ data class EmailDto(
     val toId: Long,
 
     @JsonProperty("attachments")
-    val attachments: List<Pair<String, String>> = emptyList()
+    val attachments: List<String> = emptyList()
 )

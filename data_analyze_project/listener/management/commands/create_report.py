@@ -4,9 +4,12 @@ import pandas as pd
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import requests
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 from io import BytesIO
+from PIL import Image
 
-from .report_sending_produser import ReportSendingProducer
+from .report_sending_producer import ReportSendingProducer
 
 load_dotenv()
 service_file_url = os.getenv('SERVICE_FILE_URL', 'http://localhost:8082')
@@ -34,17 +37,34 @@ def create_report(json):
     # Сохранение графика в памяти
     img_buf = BytesIO()
     plt.savefig(img_buf, format='png')
-    img_buf.seek(0)  # Сброс указателя в начало буфера
+    plt.close()  # Закрываем график, чтобы избежать отображения
 
-    # Отправка графика на HTTP-эндпоинт
-    upload_url = f'{service_file_url}/files'
-    files = {'file': ('plot.png', img_buf, 'multipart/form-data')}
-    response = requests.post(upload_url, files=files)
+    # Перемещение указателя в начало буфера
+    img_buf.seek(0)
 
-    if response.status_code != 200:
-        return
+    # Открытие изображения с помощью Pillow
+    image = Image.open(img_buf)
 
-    plt.close()
+    # Генерация PDF-документа
+    pdf_path = 'report.pdf'
+    c = canvas.Canvas(pdf_path, pagesize=letter)
+    width, height = letter
+
+    # Добавление графика в PDF
+    image.save("temp_image.png")  # Сохраняем временное изображение
+    c.drawImage("temp_image.png", 50, 400, width=500, height=250)  # Позиция и размер изображения
+
+    # Завершение PDF
+    c.save()
+
+    # Удаляем временный файл
+    os.remove("temp_image.png")
+
+    # Отправка PDF-документа на HTTP-эндпоинт
+    with open(pdf_path, 'rb') as pdf_file:
+        upload_url = f'{service_file_url}/files'
+        files = {'file': ('report.pdf', pdf_file, 'multipart/form-data')}
+        response = requests.post(upload_url, files=files)
 
     json['resultFileId'] = response.json().get('id')
     producer = ReportSendingProducer()
