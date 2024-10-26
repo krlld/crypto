@@ -10,28 +10,20 @@ import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "auth_service_users")
-class User(
+@Table(name = "auth_service_roles")
+class Role(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val email: String = "",
-
-    val password: String = "",
-
     val name: String = "",
-
-    val lastname: String = "",
-
-    val avatarId: String = "",
 
     @ManyToMany
     @JoinTable(
-        name = "auth_service_users_roles",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id")]
+        name = "auth_service_role_authorities",
+        joinColumns = [JoinColumn(name = "role_id")],
+        inverseJoinColumns = [JoinColumn(name = "authority_id")]
     )
-    val roles: Set<Role> = mutableSetOf()
+    val authorities: Set<Authority> = mutableSetOf()
 )

@@ -2,6 +2,7 @@ package by.kirilldikun.crypto.authservice.service.impl
 
 import by.kirilldikun.crypto.authservice.repository.UserRepository
 import by.kirilldikun.crypto.commons.config.CustomUserDetails
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -20,7 +21,11 @@ class UserDetailsServiceImpl(
             id = user.id!!,
             username = user.email,
             password = user.password,
-            authorities = emptySet()
+            authorities = user.roles
+                .flatMap { it.authorities }
+                .map { it.name }
+                .map { SimpleGrantedAuthority(it) }
+                .toSet()
         )
     }
 }

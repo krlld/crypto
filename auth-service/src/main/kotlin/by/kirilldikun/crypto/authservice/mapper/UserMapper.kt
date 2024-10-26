@@ -1,12 +1,15 @@
 package by.kirilldikun.crypto.authservice.mapper
 
+import by.kirilldikun.crypto.authservice.model.Role
 import by.kirilldikun.crypto.authservice.model.User
 import by.kirilldikun.crypto.commons.dto.UserDto
 import by.kirilldikun.crypto.commons.mapper.Mapper
 import org.springframework.stereotype.Component
 
 @Component
-class UserMapper : Mapper<User, UserDto> {
+class UserMapper(
+    val roleMapper: RoleMapper
+) : Mapper<User, UserDto> {
 
     override fun toDto(e: User): UserDto {
         return UserDto(
@@ -15,7 +18,8 @@ class UserMapper : Mapper<User, UserDto> {
             password = e.password,
             name = e.name,
             lastname = e.lastname,
-            avatarId = e.avatarId
+            avatarId = e.avatarId,
+            roles = e.roles.map { roleMapper.toDto(it) }.toSet()
         )
     }
 
@@ -26,7 +30,8 @@ class UserMapper : Mapper<User, UserDto> {
             password = d.password,
             name = d.name,
             lastname = d.lastname,
-            avatarId = d.avatarId
+            avatarId = d.avatarId,
+            roles = d.roleIds!!.map { Role(id = it) }.toMutableSet()
         )
     }
 }

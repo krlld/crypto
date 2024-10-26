@@ -34,9 +34,9 @@ class AuthenticationServiceImpl(
 
         val userWithEncodedPassword = userDto.copy(password = passwordEncoder.encode(userDto.password))
         val user = userMapper.toEntity(userWithEncodedPassword)
-        userRepository.save(user)
+        val savedUser = userRepository.save(user)
 
-        return userMapper.toDto(user)
+        return userMapper.toDto(savedUser)
     }
 
     @Transactional(readOnly = true)
