@@ -14,7 +14,13 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val email: String,
+    val email: String = "",
 
-    val password: String
+    val password: String = "",
+
+    val name: String = "",
+
+    val lastname: String = "",
+
+    val avatarId: String = ""
 )

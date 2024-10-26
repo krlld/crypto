@@ -11,11 +11,22 @@ class UserMapper : Mapper<User, UserDto> {
     override fun toDto(e: User): UserDto {
         return UserDto(
             id = e.id!!,
-            email = e.email
+            email = e.email,
+            password = e.password,
+            name = e.name,
+            lastname = e.lastname,
+            avatarId = e.avatarId
         )
     }
 
     override fun toEntity(d: UserDto): User {
-        TODO("Not yet implemented")
+        return User(
+            id = d.id,
+            email = d.email,
+            password = d.password,
+            name = d.name,
+            lastname = d.lastname,
+            avatarId = d.avatarId
+        )
     }
 }
