@@ -45,6 +45,15 @@ services:
     depends_on:
       - kafka
 
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+      - SERVER_PORT=8080
+      - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
+    ports:
+      - 8080:8080
+
   auth-service:
     build:
       dockerfile: auth-service.Dockerfile
