@@ -4,11 +4,13 @@ import by.kirilldikun.crypto.commons.exception.BadRequestException
 import by.kirilldikun.crypto.commons.exception.NotFoundException
 import by.kirilldikun.crypto.commons.util.TokenHelper
 import by.kirilldikun.crypto.dataanalyzeservice.dto.ReportDto
+import by.kirilldikun.crypto.dataanalyzeservice.dto.ReportFilterDto
 import by.kirilldikun.crypto.dataanalyzeservice.mapper.ReportMapper
 import by.kirilldikun.crypto.dataanalyzeservice.producer.ReportCreationProducer
 import by.kirilldikun.crypto.dataanalyzeservice.repository.ReportRepository
 import by.kirilldikun.crypto.dataanalyzeservice.service.FavoriteReportService
 import by.kirilldikun.crypto.dataanalyzeservice.service.ReportService
+import by.kirilldikun.crypto.dataanalyzeservice.specification.ReportSpecificationBuilder
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -19,20 +21,27 @@ class ReportServiceImpl(
     val reportRepository: ReportRepository,
     val favoriteReportService: FavoriteReportService,
     val reportMapper: ReportMapper,
+    val reportSpecificationBuilder: ReportSpecificationBuilder,
     val reportCreationProducer: ReportCreationProducer,
     val tokenHelper: TokenHelper
 ) : ReportService {
 
     @Transactional(readOnly = true)
-    override fun findAllPublic(pageable: Pageable): Page<ReportDto> {
-        return reportRepository.findAllPublic(pageable)
+    override fun findAllPublic(reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
+        val reportFilterDtoWithPublic = reportFilterDto?.copy(isPublic = true)
+            ?: ReportFilterDto(isPublic = true)
+        val specification = reportSpecificationBuilder.build(reportFilterDtoWithPublic)
+        return reportRepository.findAll(specification, pageable)
             .map { reportMapper.toDto(it) }
     }
 
     @Transactional(readOnly = true)
-    override fun findUserReports(pageable: Pageable): Page<ReportDto> {
+    override fun findAllUserReports(reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
         val userId = tokenHelper.getUserId()
-        return reportRepository.findAllByUserId(userId, pageable)
+        val reportFilterDtoWithPublic = reportFilterDto?.copy(userIds = listOf(userId), isPublic = null)
+            ?: ReportFilterDto(userIds = listOf(userId))
+        val specification = reportSpecificationBuilder.build(reportFilterDtoWithPublic)
+        return reportRepository.findAll(specification, pageable)
             .map { reportMapper.toDto(it) }
     }
 
