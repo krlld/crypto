@@ -42,6 +42,8 @@ services:
     environment:
       - KAFKA_BOOTSTRAP-SERVERS=kafka:9092
       - SERVICE_FILE_URL=http://file-service:8082/api/file-service
+    depends_on:
+      - kafka
 
   auth-service:
     build:
@@ -54,6 +56,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=1234
     depends_on:
       - auth-db
+      - kafka
     ports:
       - 8081:8081
 
@@ -69,6 +72,7 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - file-db
+      - kafka
     ports:
       - 8082:8082
 
@@ -85,6 +89,7 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - data-analyze-db
+      - kafka
     ports:
       - 8083:8083
 
@@ -101,6 +106,7 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - external-api-db
+      - kafka
     ports:
       - 8084:8084
 
@@ -114,6 +120,8 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
       - SERVICE_FILE_URL=http://file-service:8082/api/file-service
     env_file: notification-service.env
+    depends_on:
+      - kafka
     ports:
       - 8085:8085
 
