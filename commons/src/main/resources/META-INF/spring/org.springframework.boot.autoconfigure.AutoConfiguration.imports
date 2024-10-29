@@ -1,5 +1,4 @@
 by.kirilldikun.crypto.commons.config.CommonConfiguration
-by.kirilldikun.crypto.commons.config.CorsConfiguration
 by.kirilldikun.crypto.commons.config.JwtAuthenticationFilter
 by.kirilldikun.crypto.commons.config.JwtParser
 by.kirilldikun.crypto.commons.config.KafkaConsumerFactory

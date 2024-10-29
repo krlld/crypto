@@ -1,4 +1,4 @@
-package by.kirilldikun.crypto.commons.config
+package by.kirilldikun.crypto.apigateway.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
