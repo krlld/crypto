@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable
 interface AuthorityService {
 
     fun findAll(pageable: Pageable): Page<AuthorityDto>
+
+    fun findAllMyAuthorities(): List<AuthorityDto>
 }

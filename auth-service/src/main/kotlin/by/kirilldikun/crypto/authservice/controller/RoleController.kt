@@ -25,35 +25,35 @@ class RoleController(
     val roleService: RoleService
 ) {
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun findAll(pageable: Pageable): Page<RoleDto> {
         return roleService.findAll(pageable)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(@PathVariable id: Long): RoleDto {
         return roleService.findById(id)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun save(@RequestBody @Valid roleDto: RoleDto): RoleDto {
         return roleService.save(roleDto)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun update(@PathVariable id: Long, @RequestBody @Valid roleDto: RoleDto): RoleDto {
         return roleService.update(id, roleDto)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {

@@ -32,8 +32,11 @@ class AuthenticationServiceImpl(
             throw ConflictException("User with email ${userDto.email} already exists")
         }
 
-        val userWithEncodedPassword = userDto.copy(password = passwordEncoder.encode(userDto.password))
-        val user = userMapper.toEntity(userWithEncodedPassword)
+        val userWithEncodedPasswordAndRole = userDto.copy(
+            password = passwordEncoder.encode(userDto.password),
+            roleIds = setOf(2)
+        )
+        val user = userMapper.toEntity(userWithEncodedPasswordAndRole)
         val savedUser = userRepository.save(user)
 
         return userMapper.toDto(savedUser)

@@ -19,10 +19,16 @@ class AuthorityController(
     val authorityService: AuthorityService
 ) {
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.authservice.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun findAll(pageable: Pageable): Page<AuthorityDto> {
         return authorityService.findAll(pageable)
+    }
+
+    @GetMapping("/my-authorities")
+    @ResponseStatus(HttpStatus.OK)
+    fun findAllMyAuthorities(): List<AuthorityDto> {
+        return authorityService.findAllMyAuthorities()
     }
 }
