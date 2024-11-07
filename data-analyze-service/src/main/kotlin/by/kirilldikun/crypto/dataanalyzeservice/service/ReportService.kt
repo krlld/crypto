@@ -18,4 +18,5 @@ interface ReportService {
     fun generateReport(reportDto: ReportDto): ReportDto
 
     fun changeFavoriteStatus(reportId: Long)
+    fun isInFavoriteByIds(reportIds: List<Long>): Map<Long, Boolean>
 }

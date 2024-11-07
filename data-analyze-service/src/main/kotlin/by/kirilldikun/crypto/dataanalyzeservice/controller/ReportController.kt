@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -35,6 +36,12 @@ class ReportController(
     @ResponseStatus(HttpStatus.OK)
     fun findAllUserReports(@ModelAttribute reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
         return reportService.findAllUserReports(reportFilterDto, pageable)
+    }
+
+    @GetMapping("/is-in-favorite-by-ids")
+    @ResponseStatus(HttpStatus.OK)
+    fun isInFavoriteByIds(@RequestParam ids: List<Long>): Map<Long, Boolean> {
+        return reportService.isInFavoriteByIds(ids)
     }
 
     @PostMapping("/generate-report")

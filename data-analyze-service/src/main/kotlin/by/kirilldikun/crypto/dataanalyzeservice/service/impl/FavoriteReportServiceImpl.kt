@@ -29,4 +29,12 @@ class FavoriteReportServiceImpl(
             )
         }
     }
+
+    @Transactional(readOnly = true)
+    override fun isInFavoriteByIds(reportIds: List<Long>): Map<Long, Boolean> {
+        val userId = tokenHelper.getUserId()
+        val favoriteReports = favoriteReportRepository.findAllByUserIdAndReportIdIn(userId, reportIds)
+        val favoriteReportIds = favoriteReports.map { it.report.id }.toSet()
+        return reportIds.associateWith { favoriteReportIds.contains(it) }
+    }
 }

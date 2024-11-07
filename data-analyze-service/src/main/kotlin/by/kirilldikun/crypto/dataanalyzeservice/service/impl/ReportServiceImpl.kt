@@ -82,4 +82,9 @@ class ReportServiceImpl(
         }
         favoriteReportService.changeFavoriteStatus(reportId)
     }
+
+    @Transactional(readOnly = true)
+    override fun isInFavoriteByIds(reportIds: List<Long>): Map<Long, Boolean> {
+        return favoriteReportService.isInFavoriteByIds(reportIds)
+    }
 }
