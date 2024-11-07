@@ -12,3 +12,11 @@ spring:
             uri: ${SERVICE_AUTH_URL:http://localhost:8081/api/auth-service}
             predicates:
               - Path=/api/auth-service/**
+          - id: file-service-route
+            uri: ${SERVICE_FILE_URL:http://localhost:8082/api/file-service}
+            predicates:
+              - Path=/api/file-service/**
+          - id: data-analyze-service-route
+            uri: ${SERVICE_DATA_ANALYZE_URL:http://localhost:8083/api/data-analyze-service}
+            predicates:
+              - Path=/api/data-analyze-service/**

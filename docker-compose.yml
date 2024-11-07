@@ -51,6 +51,8 @@ services:
     environment:
       - SERVER_PORT=8080
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
+      - SERVICE_FILE_URL=http://file-service:8082/api/file-service
+      - SERVICE_DATA_ANALYZE_URL=http://data-analyze-service:8083/api/data-analyze-service
     ports:
       - 8080:8080
 
