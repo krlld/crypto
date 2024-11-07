@@ -20,3 +20,7 @@ spring:
             uri: ${SERVICE_DATA_ANALYZE_URL:http://localhost:8083/api/data-analyze-service}
             predicates:
               - Path=/api/data-analyze-service/**
+          - id: external-api-service-route
+            uri: ${SERVICE_EXTERNAL_API_URL:http://localhost:8084/api/external-api-service}
+            predicates:
+              - Path=/api/external-api-service/**
