@@ -7,7 +7,7 @@ interface CurrencyService {
 
     fun findAll(): List<CurrencyData>
 
-    fun findAllUserFavorites(): List<CurrencyData>
+    fun isInUserFavoriteByIds(currencyIds: List<String>): Map<String, Boolean>
 
     fun changeFavoriteStatus(currencyId: String)
 

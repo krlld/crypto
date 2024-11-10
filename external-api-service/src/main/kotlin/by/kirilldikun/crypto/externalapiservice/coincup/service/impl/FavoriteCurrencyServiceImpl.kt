@@ -12,9 +12,10 @@ class FavoriteCurrencyServiceImpl(
 ) : FavoriteCurrencyService {
 
     @Transactional(readOnly = true)
-    override fun findAllUserCurrencyIds(userId: Long): List<String> {
-        return favoriteCurrencyRepository.findAllByUserId(userId)
-            .map { it.currencyId }
+    override fun isInUserFavoriteByIds(userId: Long, currencyIds: List<String>): Map<String, Boolean> {
+        val favoriteCurrencies = favoriteCurrencyRepository.findAllByUserIdAndCurrencyIdIn(userId, currencyIds)
+        val favoriteCurrencyIds = favoriteCurrencies.map { it.currencyId }
+        return currencyIds.associateWith { favoriteCurrencyIds.contains(it) }
     }
 
     @Transactional

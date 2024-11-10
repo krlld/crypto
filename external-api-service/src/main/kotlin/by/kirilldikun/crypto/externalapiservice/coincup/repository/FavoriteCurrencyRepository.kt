@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface FavoriteCurrencyRepository : JpaRepository<FavoriteCurrency, Long> {
 
-    fun findAllByUserId(userId: Long): List<FavoriteCurrency>
+    fun findAllByUserIdAndCurrencyIdIn(userId: Long, currencyIds: List<String>): List<FavoriteCurrency>
 
     fun findByUserIdAndCurrencyId(userId: Long, currencyId: String): FavoriteCurrency?
 }

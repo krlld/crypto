@@ -8,6 +8,7 @@ import by.kirilldikun.crypto.externalapiservice.coincup.service.CurrencyService
 import by.kirilldikun.crypto.externalapiservice.coincup.service.FavoriteCurrencyService
 import by.kirilldikun.crypto.externalapiservice.coincup.service.SubscriptionToPriceService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CurrencyServiceImpl(
@@ -21,10 +22,10 @@ class CurrencyServiceImpl(
         return coinCapFeignClient.getCurrencies().data
     }
 
-    override fun findAllUserFavorites(): List<CurrencyData> {
+    @Transactional(readOnly = true)
+    override fun isInUserFavoriteByIds(currencyIds: List<String>): Map<String, Boolean> {
         val userId = tokenHelper.getUserId()
-        val favoriteCurrencies = favoriteCurrencyService.findAllUserCurrencyIds(userId)
-        return coinCapFeignClient.getCurrencies(favoriteCurrencies).data
+        return favoriteCurrencyService.isInUserFavoriteByIds(userId, currencyIds)
     }
 
     override fun changeFavoriteStatus(currencyId: String) {
