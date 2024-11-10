@@ -2,14 +2,16 @@ package by.kirilldikun.crypto.authservice.controller
 
 import by.kirilldikun.crypto.authservice.dto.ProfileDto
 import by.kirilldikun.crypto.authservice.service.ProfileService
+import by.kirilldikun.crypto.authservice.service.UserRoleService
+import by.kirilldikun.crypto.authservice.service.UserService
 import by.kirilldikun.crypto.commons.dto.UserDto
-import by.kirilldikun.crypto.commons.service.UserService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,7 +26,8 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     val userDetailsService: UserDetailsService,
     val userService: UserService,
-    val profileService: ProfileService
+    val profileService: ProfileService,
+    val userRoleService: UserRoleService
 ) {
 
     @GetMapping
@@ -43,5 +46,11 @@ class UserController(
     @ResponseStatus(HttpStatus.OK)
     fun updateProfile(@PathVariable id: Long, @RequestBody @Valid profileDto: ProfileDto): ProfileDto {
         return profileService.update(id, profileDto)
+    }
+
+    @PatchMapping("/reassign-roles")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun assignRoles(@RequestParam userId: Long, @RequestParam newRoleIds: List<Long>) {
+        userRoleService.reassignRoles(userId, newRoleIds)
     }
 }

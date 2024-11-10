@@ -4,7 +4,7 @@ import by.kirilldikun.crypto.commons.dto.AuthorityDto
 import by.kirilldikun.crypto.authservice.mapper.AuthorityMapper
 import by.kirilldikun.crypto.authservice.repository.AuthorityRepository
 import by.kirilldikun.crypto.authservice.service.AuthorityService
-import by.kirilldikun.crypto.commons.service.UserService
+import by.kirilldikun.crypto.authservice.service.UserService
 import by.kirilldikun.crypto.commons.util.TokenHelper
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
