@@ -4,6 +4,7 @@ class Authorities {
 
     companion object {
         const val MANAGE_ROLES = "MANAGE_ROLES"
-        const val GENERATE_REPORTS = "GENERATE_REPORTS"
+        const val SUBSCRIBE_TO_PRICE = "SUBSCRIBE_TO_PRICE"
+        const val MANAGE_CURRENCIES = "MANAGE_CURRENCIES"
     }
 }

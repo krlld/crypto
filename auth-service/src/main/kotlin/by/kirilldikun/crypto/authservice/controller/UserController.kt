@@ -7,6 +7,7 @@ import by.kirilldikun.crypto.authservice.service.UserService
 import by.kirilldikun.crypto.commons.dto.UserDto
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.validation.annotation.Validated
@@ -48,9 +49,10 @@ class UserController(
         return profileService.update(id, profileDto)
     }
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
     @PatchMapping("/reassign-roles")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun assignRoles(@RequestParam userId: Long, @RequestParam newRoleIds: List<Long>) {
+    fun resignRoles(@RequestParam userId: Long, @RequestParam newRoleIds: List<Long>) {
         userRoleService.reassignRoles(userId, newRoleIds)
     }
 }

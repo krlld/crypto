@@ -5,6 +5,7 @@ import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyData
 import by.kirilldikun.crypto.externalapiservice.coincup.dto.SubscriptionToPriceDto
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -23,30 +24,35 @@ class CurrencyController(
     val currencyService: CurrencyService
 ) {
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun findAll(): List<CurrencyData> {
         return currencyService.findAll()
     }
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
     @GetMapping("/is-in-favorite-by-ids")
     @ResponseStatus(HttpStatus.OK)
     fun isInFavoriteByIds(@RequestParam ids: List<String>): Map<String, Boolean> {
         return currencyService.isInUserFavoriteByIds(ids)
     }
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
     @PatchMapping("/favorites/{currencyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun changeFavoriteStatus(@PathVariable currencyId: String) {
         currencyService.changeFavoriteStatus(currencyId)
     }
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).SUBSCRIBE_TO_PRICE)")
     @GetMapping("/subscription-to-prices")
     @ResponseStatus(HttpStatus.OK)
     fun findAllUserSubscriptionToPrices(): List<SubscriptionToPriceDto> {
         return currencyService.findAllUserSubscriptionToPrices()
     }
 
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).SUBSCRIBE_TO_PRICE)")
     @PostMapping("/subscribe-to-price")
     @ResponseStatus(HttpStatus.CREATED)
     fun subscribeToPrice(@RequestBody @Valid subscriptionToPriceDto: SubscriptionToPriceDto) {
