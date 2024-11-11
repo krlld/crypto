@@ -4,6 +4,8 @@ import by.kirilldikun.crypto.externalapiservice.coincup.service.CurrencyService
 import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyData
 import by.kirilldikun.crypto.externalapiservice.coincup.dto.SubscriptionToPriceDto
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
@@ -27,8 +29,8 @@ class CurrencyController(
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun findAll(): List<CurrencyData> {
-        return currencyService.findAll()
+    fun findAll(@RequestParam(required = false) search: String?, pageable: Pageable): Page<CurrencyData> {
+        return currencyService.findAll(search, pageable)
     }
 
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
