@@ -4,6 +4,8 @@ import by.kirilldikun.crypto.externalapiservice.coincup.dto.SubscriptionToPriceD
 import by.kirilldikun.crypto.externalapiservice.coincup.mapper.SubscribedPriceMapper
 import by.kirilldikun.crypto.externalapiservice.coincup.repository.SubscriptionToPriceRepository
 import by.kirilldikun.crypto.externalapiservice.coincup.service.SubscriptionToPriceService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,8 +16,8 @@ class SubscriptionToPriceServiceImpl(
 ) : SubscriptionToPriceService {
 
     @Transactional(readOnly = true)
-    override fun findAllByUserId(userId: Long): List<SubscriptionToPriceDto> {
-        return subscriptionToPriceRepository.findAllByUserId(userId)
+    override fun findAllByUserId(pageable: Pageable, userId: Long): Page<SubscriptionToPriceDto> {
+        return subscriptionToPriceRepository.findAllByUserId(pageable, userId)
             .map { subscribedPriceMapper.toDto(it) }
     }
 

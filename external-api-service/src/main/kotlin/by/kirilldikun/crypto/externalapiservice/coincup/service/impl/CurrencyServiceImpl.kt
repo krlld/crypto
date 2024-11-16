@@ -1,15 +1,13 @@
 package by.kirilldikun.crypto.externalapiservice.coincup.service.impl
 
 import by.kirilldikun.crypto.commons.util.TokenHelper
-import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyData
+import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyDto
 import by.kirilldikun.crypto.externalapiservice.coincup.dto.SubscriptionToPriceDto
 import by.kirilldikun.crypto.externalapiservice.coincup.feign.CoinCapFeignClient
 import by.kirilldikun.crypto.externalapiservice.coincup.service.CurrencyService
 import by.kirilldikun.crypto.externalapiservice.coincup.service.FavoriteCurrencyService
 import by.kirilldikun.crypto.externalapiservice.coincup.service.SubscriptionToPriceService
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,11 +20,8 @@ class CurrencyServiceImpl(
     val tokenHelper: TokenHelper
 ) : CurrencyService {
 
-    override fun findAll(search: String?, pageable: Pageable): Page<CurrencyData> {
-        val limit = pageable.pageSize
-        val offset = pageable.pageNumber * limit
-        val data = coinCapFeignClient.getCurrencies(search, limit, offset).data
-        return PageImpl(data, PageRequest.of(pageable.pageNumber, pageable.pageSize), data.size.toLong())
+    override fun findAll(search: String?): List<CurrencyDto> {
+        return coinCapFeignClient.getCurrencies(search).data
     }
 
     @Transactional(readOnly = true)
@@ -40,9 +35,9 @@ class CurrencyServiceImpl(
         favoriteCurrencyService.changeFavoriteStatus(userId, currencyId)
     }
 
-    override fun findAllUserSubscriptionToPrices(): List<SubscriptionToPriceDto> {
+    override fun findAllUserSubscriptionToPrices(pageable: Pageable): Page<SubscriptionToPriceDto> {
         val userId = tokenHelper.getUserId()
-        return subscriptionToPriceService.findAllByUserId(userId)
+        return subscriptionToPriceService.findAllByUserId(pageable, userId)
     }
 
     override fun subscribeToPrice(subscriptionToPriceDto: SubscriptionToPriceDto): SubscriptionToPriceDto {

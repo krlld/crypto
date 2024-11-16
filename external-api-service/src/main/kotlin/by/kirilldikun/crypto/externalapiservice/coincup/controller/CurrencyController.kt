@@ -1,7 +1,7 @@
 package by.kirilldikun.crypto.externalapiservice.coincup.controller
 
 import by.kirilldikun.crypto.externalapiservice.coincup.service.CurrencyService
-import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyData
+import by.kirilldikun.crypto.externalapiservice.coincup.dto.CurrencyDto
 import by.kirilldikun.crypto.externalapiservice.coincup.dto.SubscriptionToPriceDto
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
@@ -29,8 +29,8 @@ class CurrencyController(
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun findAll(@RequestParam(required = false) search: String?, pageable: Pageable): Page<CurrencyData> {
-        return currencyService.findAll(search, pageable)
+    fun findAll(@RequestParam(required = false) search: String?): List<CurrencyDto> {
+        return currencyService.findAll(search)
     }
 
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)")
@@ -50,8 +50,8 @@ class CurrencyController(
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).SUBSCRIBE_TO_PRICE)")
     @GetMapping("/subscription-to-prices")
     @ResponseStatus(HttpStatus.OK)
-    fun findAllUserSubscriptionToPrices(): List<SubscriptionToPriceDto> {
-        return currencyService.findAllUserSubscriptionToPrices()
+    fun findAllUserSubscriptionToPrices(pageable: Pageable): Page<SubscriptionToPriceDto> {
+        return currencyService.findAllUserSubscriptionToPrices(pageable)
     }
 
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).SUBSCRIBE_TO_PRICE)")
