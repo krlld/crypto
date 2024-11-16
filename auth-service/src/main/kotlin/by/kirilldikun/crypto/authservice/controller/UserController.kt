@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -43,10 +42,16 @@ class UserController(
         return userService.findAllByIds(ids)
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/about-me")
     @ResponseStatus(HttpStatus.OK)
-    fun updateProfile(@PathVariable id: Long, @RequestBody @Valid profileDto: ProfileDto): ProfileDto {
-        return profileService.update(id, profileDto)
+    fun aboutMe(): UserDto {
+        return userService.aboutMe()
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun updateProfile(@RequestBody @Valid profileDto: ProfileDto): ProfileDto {
+        return profileService.update(profileDto)
     }
 
     @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")

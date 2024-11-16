@@ -4,5 +4,5 @@ import by.kirilldikun.crypto.authservice.dto.ProfileDto
 
 interface ProfileService {
 
-    fun update(userId: Long, profileDto: ProfileDto): ProfileDto
+    fun update(profileDto: ProfileDto): ProfileDto
 }

@@ -6,5 +6,7 @@ interface UserService {
 
     fun findAllByIds(userIds: List<Long>): List<UserDto>
 
+    fun aboutMe(): UserDto
+
     fun save(userDto: UserDto): UserDto
 }
