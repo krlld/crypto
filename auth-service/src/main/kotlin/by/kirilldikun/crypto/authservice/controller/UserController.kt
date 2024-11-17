@@ -52,6 +52,18 @@ class UserController(
         return userService.findAllByIds(ids)
     }
 
+    @GetMapping("/profiles")
+    @ResponseStatus(HttpStatus.OK)
+    fun findAllProfiles(pageable: Pageable): Page<ProfileDto> {
+        return profileService.findAll(pageable)
+    }
+
+    @GetMapping("/profiles-by-ids")
+    @ResponseStatus(HttpStatus.OK)
+    fun findAllProfilesByIds(@RequestParam ids: List<Long>): List<ProfileDto> {
+        return profileService.findAllByIds(ids)
+    }
+
     @GetMapping("/about-me")
     @ResponseStatus(HttpStatus.OK)
     fun aboutMe(): UserDto {

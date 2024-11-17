@@ -9,6 +9,7 @@ class ProfileMapper {
 
     fun toDto(e: User): ProfileDto {
         return ProfileDto(
+            id = e.id,
             name = e.name,
             lastname = e.lastname,
             avatarId = e.avatarId
