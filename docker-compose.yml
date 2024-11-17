@@ -36,6 +36,14 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
       DYNAMIC_CONFIG_ENABLED: true
 
+  crypto-app:
+    build: ./crypto-app
+    container_name: crypto-app
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_URL=http://api-gateway:8080/api
+
   data-analyze-project:
     build: ./data_analyze_project
     container_name: data-analyze-project
