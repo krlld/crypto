@@ -6,6 +6,8 @@ import by.kirilldikun.crypto.authservice.service.UserService
 import by.kirilldikun.crypto.commons.dto.UserDto
 import by.kirilldikun.crypto.commons.exception.NotFoundException
 import by.kirilldikun.crypto.commons.util.TokenHelper
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,6 +17,12 @@ class UserServiceImpl(
     val userMapper: UserMapper,
     val tokenHelper: TokenHelper
 ) : UserService {
+
+    @Transactional(readOnly = true)
+    override fun findAll(pageable: Pageable): Page<UserDto> {
+        return userRepository.findAll(pageable)
+            .map { userMapper.toDto(it) }
+    }
 
     @Transactional(readOnly = true)
     override fun findAllByIds(userIds: List<Long>): List<UserDto> {

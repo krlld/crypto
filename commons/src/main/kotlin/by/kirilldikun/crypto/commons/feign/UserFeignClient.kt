@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @ConditionalOnProperty("service.auth.url")
-@FeignClient(name = "userFeignClient", url = "\${service.auth.url}")
+@FeignClient(name = "userFeignClient", url = "\${service.auth.url}/users")
 interface UserFeignClient {
 
-    @GetMapping("/users")
+    @GetMapping("/by-email")
     fun findByEmail(@RequestParam email: String): CustomUserDetails
 
-    @GetMapping("/users/users-by-ids")
+    @GetMapping("/users-by-ids")
     fun findAllByIds(@RequestParam ids: List<Long>): List<UserDto>
 }

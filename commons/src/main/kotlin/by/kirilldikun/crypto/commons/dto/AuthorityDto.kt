@@ -9,5 +9,7 @@ data class AuthorityDto(
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     val id: Long? = null,
 
-    val name: String
+    val name: String,
+
+    val description: String
 )

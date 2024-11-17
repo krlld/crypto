@@ -15,6 +15,7 @@ class RoleMapper(
         return RoleDto(
             id = e.id,
             name = e.name,
+            description = e.description,
             authorities = e.authorities.map { authorityMapper.toDto(it) }.toSet()
         )
     }
@@ -23,6 +24,7 @@ class RoleMapper(
         return Role(
             id = d.id,
             name = d.name,
+            description = d.description,
             authorities = d.authorityIds!!.map { Authority(id = it) }.toMutableSet()
         )
     }

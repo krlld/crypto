@@ -1,13 +1,15 @@
 CREATE TABLE auth_service_authorities
 (
-    id   BIGSERIAL PRIMARY KEY,
-    name TEXT NOT NULL
+    id          BIGSERIAL PRIMARY KEY,
+    name        TEXT NOT NULL,
+    description TEXT NOT NULL
 );
 
 CREATE TABLE auth_service_roles
 (
-    id   BIGSERIAL PRIMARY KEY,
-    name TEXT NOT NULL
+    id          BIGSERIAL PRIMARY KEY,
+    name        TEXT NOT NULL,
+    description TEXT NOT NULL
 );
 
 CREATE TABLE auth_service_role_authorities

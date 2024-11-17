@@ -1,11 +1,14 @@
 package by.kirilldikun.crypto.authservice.controller
 
 import by.kirilldikun.crypto.authservice.dto.ProfileDto
+import by.kirilldikun.crypto.authservice.dto.ReassignRolesDto
 import by.kirilldikun.crypto.authservice.service.ProfileService
 import by.kirilldikun.crypto.authservice.service.UserRoleService
 import by.kirilldikun.crypto.authservice.service.UserService
 import by.kirilldikun.crypto.commons.dto.UserDto
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.userdetails.UserDetails
@@ -30,10 +33,17 @@ class UserController(
     val userRoleService: UserRoleService
 ) {
 
-    @GetMapping
+    @GetMapping("/by-email")
     @ResponseStatus(HttpStatus.OK)
     fun findByEmail(@RequestParam email: String): UserDetails {
         return userDetailsService.loadUserByUsername(email)
+    }
+
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_USERS)")
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun findAll(pageable: Pageable): Page<UserDto> {
+        return userService.findAll(pageable)
     }
 
     @GetMapping("/users-by-ids")
@@ -54,10 +64,10 @@ class UserController(
         return profileService.update(profileDto)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)")
+    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_USERS)")
     @PatchMapping("/reassign-roles")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun resignRoles(@RequestParam userId: Long, @RequestParam newRoleIds: List<Long>) {
-        userRoleService.reassignRoles(userId, newRoleIds)
+    fun resignRoles(@RequestBody reassignRolesDto: ReassignRolesDto) {
+        userRoleService.reassignRoles(reassignRolesDto)
     }
 }

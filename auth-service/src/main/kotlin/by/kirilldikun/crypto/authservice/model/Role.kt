@@ -19,6 +19,8 @@ class Role(
 
     val name: String = "",
 
+    val description: String = "",
+
     @ManyToMany
     @JoinTable(
         name = "auth_service_role_authorities",

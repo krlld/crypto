@@ -11,6 +11,8 @@ data class RoleDto(
 
     val name: String,
 
+    val description: String,
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val authorityIds: Set<Long>? = null,
 

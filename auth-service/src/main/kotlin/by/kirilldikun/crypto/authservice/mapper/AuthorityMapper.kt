@@ -11,14 +11,16 @@ class AuthorityMapper : Mapper<Authority, AuthorityDto> {
     override fun toDto(e: Authority): AuthorityDto {
         return AuthorityDto(
             id = e.id,
-            name = e.name
+            name = e.name,
+            description = e.description
         )
     }
 
     override fun toEntity(d: AuthorityDto): Authority {
         return Authority(
             id = d.id,
-            name = d.name
+            name = d.name,
+            description = d.description
         )
     }
 }

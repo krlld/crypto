@@ -14,5 +14,7 @@ class Authority(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    val name: String = ""
+    val name: String = "",
+
+    val description: String = ""
 )
