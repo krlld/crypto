@@ -10,7 +10,7 @@ data class ReportFilterDto(
 
     val createdAtDateEnd: LocalDate? = null,
 
-    val query: String? = null,
+    val search: String? = null,
 
     val isPublic: Boolean? = null
 )

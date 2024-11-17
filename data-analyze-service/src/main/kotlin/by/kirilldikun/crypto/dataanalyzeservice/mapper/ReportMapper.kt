@@ -12,6 +12,7 @@ class ReportMapper : Mapper<Report, ReportDto> {
         return ReportDto(
             id = e.id,
             title = e.title,
+            description = e.description,
             sourceFileId = e.sourceFileId,
             resultFileId = e.resultFileId,
             userId = e.userId,
@@ -24,6 +25,7 @@ class ReportMapper : Mapper<Report, ReportDto> {
         return Report(
             id = d.id,
             title = d.title,
+            description = d.description,
             sourceFileId = d.sourceFileId,
             resultFileId = d.resultFileId,
             userId = d.userId!!,

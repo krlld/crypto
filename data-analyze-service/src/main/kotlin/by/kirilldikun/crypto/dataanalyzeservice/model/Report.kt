@@ -19,6 +19,8 @@ class Report(
 
     val title: String = "",
 
+    val description: String = "",
+
     val sourceFileId: String = "",
 
     val resultFileId: String? = null,

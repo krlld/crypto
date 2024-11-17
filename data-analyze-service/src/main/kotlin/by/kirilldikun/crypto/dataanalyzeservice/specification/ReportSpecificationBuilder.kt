@@ -61,12 +61,17 @@ class ReportSpecificationBuilder {
                 predicates.add(createdAtPredicate)
             }
 
-            if (!filter.query.isNullOrEmpty()) {
-                val queryPredicate = criteriaBuilder.like(
+            if (!filter.search.isNullOrEmpty()) {
+                val titlePredicate = criteriaBuilder.like(
                     criteriaBuilder.lower(root.get("title")),
-                    "%${filter.query.lowercase()}%"
+                    "%${filter.search.lowercase()}%"
                 )
-                predicates.add(queryPredicate)
+                val descriptionPredicate = criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("description")),
+                    "%${filter.search.lowercase()}%"
+                )
+                val generalPredicate = criteriaBuilder.or(titlePredicate, descriptionPredicate)
+                predicates.add(generalPredicate)
             }
 
             if (filter.isPublic != null) {
