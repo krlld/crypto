@@ -20,15 +20,28 @@ const ReportsPage: React.FC = () => {
 	const [totalReports, setTotalReports] = useState<number>(0);
 	const [favorites, setFavorites] = useState<Record<number, boolean>>({});
 	const [filter, setFilter] = useState<CurrencyFilter>({});
+	const [reportType, setReportType] = useState<'all' | 'my' | 'favorites'>('all');
 
 	useEffect(() => {
 		fetchReports();
-	}, [currentPage, pageSize, filter]);
+	}, [currentPage, pageSize, filter, reportType]);
 
 	const fetchReports = async () => {
 		setLoading(true);
 		try {
-			const response = await axios.get<Page<Report>>(`${API_URL}/data-analyze-service/reports`, {
+			let endpoint = '';
+			switch (reportType) {
+				case 'my':
+					endpoint = `${API_URL}/data-analyze-service/reports/my-reports`;
+					break;
+				case 'favorites':
+					endpoint = `${API_URL}/data-analyze-service/reports/favorites`;
+					break;
+				default:
+					endpoint = `${API_URL}/data-analyze-service/reports`;
+			}
+
+			const response = await axios.get<Page<Report>>(endpoint, {
 				params: {
 					sort: 'id,desc',
 					page: currentPage,
@@ -121,9 +134,37 @@ const ReportsPage: React.FC = () => {
 		setCurrentPage(0);
 	};
 
+	// Функция для изменения типа отчетов
+	const handleReportTypeChange = (type: 'all' | 'my' | 'favorites') => {
+		setReportType(type);
+		setCurrentPage(0); // Сбросить текущую страницу при смене типа
+	};
+
 	return (
 		<div style={{ padding: '20px' }}>
 			<h2>Отчеты</h2>
+			<div style={{ marginBottom: 16 }}>
+				<Button
+					type={reportType === 'all' ? 'primary' : 'default'}
+					onClick={() => handleReportTypeChange('all')}
+					style={{ marginRight: 8 }}
+				>
+					Все публичные отчеты
+				</Button>
+				<Button
+					type={reportType === 'my' ? 'primary' : 'default'}
+					onClick={() => handleReportTypeChange('my')}
+					style={{ marginRight: 8 }}
+				>
+					Мои отчеты
+				</Button>
+				<Button
+					type={reportType === 'favorites' ? 'primary' : 'default'}
+					onClick={() => handleReportTypeChange('favorites')}
+				>
+					Избранные отчеты
+				</Button>
+			</div>
 			<Input placeholder="Поиск по названию" onChange={handleSearch} style={{ marginBottom: 16 }} />
 			<RangePicker onChange={handleDateChange} style={{ marginBottom: 16 }} />
 			{loading ? (
@@ -135,6 +176,7 @@ const ReportsPage: React.FC = () => {
 						return (
 							<Col span={6} key={report.id} style={{ marginBottom: 16 }}>
 								<Card
+									hoverable
 									title={report.title}
 									bordered={false}
 									extra={

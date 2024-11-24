@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class NewsServiceImpl(
-    @Value("\${alphavantage.api.key}")
+    @Value("\${alphavantage.api.key:DEMO_KEY}")
     val apikey: String,
     val alphavantageFeignClient: AlphavantageFeignClient,
     val currencyService: CurrencyService

@@ -11,6 +11,8 @@ interface ReportService {
 
     fun findAllUserReports(reportFilterDto: ReportFilterDto? = null, pageable: Pageable): Page<ReportDto>
 
+    fun findAllFavorites(reportFilterDto: ReportFilterDto? = null, pageable: Pageable): Page<ReportDto>
+
     fun findById(reportId: Long): ReportDto
 
     fun save(reportDto: ReportDto): ReportDto

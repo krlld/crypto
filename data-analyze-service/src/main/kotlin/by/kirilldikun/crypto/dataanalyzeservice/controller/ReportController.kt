@@ -38,6 +38,12 @@ class ReportController(
         return reportService.findAllUserReports(reportFilterDto, pageable)
     }
 
+    @GetMapping("/favorites")
+    @ResponseStatus(HttpStatus.OK)
+    fun findAllFavorites(@ModelAttribute reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
+        return reportService.findAllFavorites(reportFilterDto, pageable)
+    }
+
     @GetMapping("/is-in-favorite-by-ids")
     @ResponseStatus(HttpStatus.OK)
     fun isInFavoriteByIds(@RequestParam ids: List<Long>): Map<Long, Boolean> {

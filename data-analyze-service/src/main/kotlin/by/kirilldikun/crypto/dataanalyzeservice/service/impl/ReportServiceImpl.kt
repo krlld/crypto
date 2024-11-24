@@ -38,9 +38,18 @@ class ReportServiceImpl(
     @Transactional(readOnly = true)
     override fun findAllUserReports(reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
         val userId = tokenHelper.getUserId()
-        val reportFilterDtoWithPublic = reportFilterDto?.copy(userIds = listOf(userId), isPublic = null)
+        val reportFilterDtoWithUserId = reportFilterDto?.copy(userIds = listOf(userId))
             ?: ReportFilterDto(userIds = listOf(userId))
-        val specification = reportSpecificationBuilder.build(reportFilterDtoWithPublic)
+        val specification = reportSpecificationBuilder.build(reportFilterDtoWithUserId)
+        return reportRepository.findAll(specification, pageable)
+            .map { reportMapper.toDto(it) }
+    }
+
+    @Transactional(readOnly = true)
+    override fun findAllFavorites(reportFilterDto: ReportFilterDto?, pageable: Pageable): Page<ReportDto> {
+        val userId = tokenHelper.getUserId()
+        val favoriteReportIds = favoriteReportService.findAllFavoriteReportIds(userId)
+        val specification = reportSpecificationBuilder.build(reportFilterDto, favoriteReportIds)
         return reportRepository.findAll(specification, pageable)
             .map { reportMapper.toDto(it) }
     }

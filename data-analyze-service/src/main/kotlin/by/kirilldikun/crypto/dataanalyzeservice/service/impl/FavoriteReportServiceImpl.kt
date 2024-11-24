@@ -14,6 +14,12 @@ class FavoriteReportServiceImpl(
     val tokenHelper: TokenHelper
 ) : FavoriteReportService {
 
+    @Transactional(readOnly = true)
+    override fun findAllFavoriteReportIds(userId: Long): List<Long> {
+        return favoriteReportRepository.findAllByUserId(userId)
+            .map { it.report.id!! }
+    }
+
     @Transactional
     override fun changeFavoriteStatus(reportId: Long) {
         val userId = tokenHelper.getUserId()

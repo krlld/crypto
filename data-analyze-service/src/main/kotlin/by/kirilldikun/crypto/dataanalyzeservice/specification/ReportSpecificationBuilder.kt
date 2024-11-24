@@ -10,21 +10,17 @@ import org.springframework.stereotype.Component
 @Component
 class ReportSpecificationBuilder {
 
-    fun build(filter: ReportFilterDto?): Specification<Report> {
+    fun build(filter: ReportFilterDto? = null, reportIds: List<Long>? = null): Specification<Report> {
         return Specification { root, queryObj, criteriaBuilder ->
-
-            if (filter == null) {
-                return@Specification criteriaBuilder.conjunction()
-            }
 
             val predicates = mutableListOf<Predicate>()
 
-            if (filter.userIds != null) {
+            if (filter?.userIds != null) {
                 val userIdsPredicate = root.get<Long>("userId").`in`(filter.userIds)
                 predicates.add(userIdsPredicate)
             }
 
-            if (filter.createdAtDateStart != null && filter.createdAtDateEnd != null) {
+            if (filter?.createdAtDateStart != null && filter.createdAtDateEnd != null) {
                 val createdAtPredicate = criteriaBuilder.between(
                     criteriaBuilder.function(
                         "DATE",
@@ -37,7 +33,7 @@ class ReportSpecificationBuilder {
                 predicates.add(createdAtPredicate)
             }
 
-            if (filter.createdAtDateStart != null && filter.createdAtDateEnd == null) {
+            if (filter?.createdAtDateStart != null && filter.createdAtDateEnd == null) {
                 val createdAtPredicate = criteriaBuilder.greaterThanOrEqualTo(
                     criteriaBuilder.function(
                         "DATE",
@@ -49,7 +45,7 @@ class ReportSpecificationBuilder {
                 predicates.add(createdAtPredicate)
             }
 
-            if (filter.createdAtDateStart == null && filter.createdAtDateEnd != null) {
+            if (filter?.createdAtDateStart == null && filter?.createdAtDateEnd != null) {
                 val createdAtPredicate = criteriaBuilder.lessThanOrEqualTo(
                     criteriaBuilder.function(
                         "DATE",
@@ -61,7 +57,7 @@ class ReportSpecificationBuilder {
                 predicates.add(createdAtPredicate)
             }
 
-            if (!filter.search.isNullOrEmpty()) {
+            if (filter?.search != null && filter.search.isNotEmpty()) {
                 val titlePredicate = criteriaBuilder.like(
                     criteriaBuilder.lower(root.get("title")),
                     "%${filter.search.lowercase()}%"
@@ -74,12 +70,17 @@ class ReportSpecificationBuilder {
                 predicates.add(generalPredicate)
             }
 
-            if (filter.isPublic != null) {
+            if (filter?.isPublic != null) {
                 val isPublicPredicate = criteriaBuilder.equal(
                     root.get<Boolean>("isPublic"),
                     filter.isPublic
                 )
                 predicates.add(isPublicPredicate)
+            }
+
+            if (reportIds != null) {
+                val reportIdsPredicate = root.get<Long>("id").`in`(reportIds)
+                predicates.add(reportIdsPredicate)
             }
 
             return@Specification criteriaBuilder.and(*predicates.toTypedArray())
