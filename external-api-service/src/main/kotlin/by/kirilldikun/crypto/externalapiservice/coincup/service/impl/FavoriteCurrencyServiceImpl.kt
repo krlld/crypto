@@ -18,6 +18,11 @@ class FavoriteCurrencyServiceImpl(
         return currencyIds.associateWith { favoriteCurrencyIds.contains(it) }
     }
 
+    @Transactional(readOnly = true)
+    override fun findAllByUserId(userId: Long): List<FavoriteCurrency> {
+        return favoriteCurrencyRepository.findAllByUserId(userId)
+    }
+
     @Transactional
     override fun changeFavoriteStatus(userId: Long, currencyId: String) {
         val foundFavoriteCurrency = favoriteCurrencyRepository.findByUserIdAndCurrencyId(userId, currencyId)

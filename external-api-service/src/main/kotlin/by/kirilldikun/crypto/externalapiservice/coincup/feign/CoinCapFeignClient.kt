@@ -9,5 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam
 interface CoinCapFeignClient {
 
     @GetMapping("/assets")
-    fun getCurrencies(@RequestParam(required = false) search: String? = null): CurrenciesResponse
+    fun getCurrencies(
+        @RequestParam(required = false) search: String? = null,
+        @RequestParam(required = false) ids: String? = null
+    ): CurrenciesResponse
 }

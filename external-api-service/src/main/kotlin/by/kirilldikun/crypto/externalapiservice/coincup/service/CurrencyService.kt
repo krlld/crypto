@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable
 
 interface CurrencyService {
 
-    fun findAll(search: String?): List<CurrencyDto>
+    fun findAll(search: String? = null, ids: List<String>? = null): List<CurrencyDto>
+
+    fun findAllFavoriteCurrencies(): List<CurrencyDto>
 
     fun isInUserFavoriteByIds(currencyIds: List<String>): Map<String, Boolean>
 

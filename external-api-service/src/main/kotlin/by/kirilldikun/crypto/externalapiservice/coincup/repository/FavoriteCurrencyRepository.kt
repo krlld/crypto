@@ -7,5 +7,7 @@ interface FavoriteCurrencyRepository : JpaRepository<FavoriteCurrency, Long> {
 
     fun findAllByUserIdAndCurrencyIdIn(userId: Long, currencyIds: List<String>): List<FavoriteCurrency>
 
+    fun findAllByUserId(userId: Long): List<FavoriteCurrency>
+
     fun findByUserIdAndCurrencyId(userId: Long, currencyId: String): FavoriteCurrency?
 }

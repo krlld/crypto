@@ -122,6 +122,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
+    env_file: external-api-service.env
     depends_on:
       - external-api-db
     ports:

@@ -6,3 +6,4 @@ file-db-volume
 files
 external-api-db-volume
 notification-service.env
+external-api-service.env

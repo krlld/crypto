@@ -20,8 +20,15 @@ class CurrencyServiceImpl(
     val tokenHelper: TokenHelper
 ) : CurrencyService {
 
-    override fun findAll(search: String?): List<CurrencyDto> {
-        return coinCapFeignClient.getCurrencies(search).data
+    override fun findAll(search: String?, ids: List<String>?): List<CurrencyDto> {
+        return coinCapFeignClient.getCurrencies(search = search, ids = ids?.joinToString(",")).data
+    }
+
+    override fun findAllFavoriteCurrencies(): List<CurrencyDto> {
+        val userId = tokenHelper.getUserId()
+        val favorites = favoriteCurrencyService.findAllByUserId(userId)
+        val currencyIds = favorites.map { it.currencyId }
+        return findAll(ids = currencyIds)
     }
 
     @Transactional(readOnly = true)
