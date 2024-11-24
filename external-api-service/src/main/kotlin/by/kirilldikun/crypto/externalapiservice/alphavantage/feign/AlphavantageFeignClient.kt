@@ -10,8 +10,8 @@ interface AlphavantageFeignClient {
 
     @GetMapping
     fun findAllNews(
-        @RequestParam tickers: List<String> = listOf("COIN"),
         @RequestParam function: String = "NEWS_SENTIMENT",
+        @RequestParam tickers: List<String> = listOf("COIN"),
         @RequestParam apikey: String
     ): NewsResponse
 }

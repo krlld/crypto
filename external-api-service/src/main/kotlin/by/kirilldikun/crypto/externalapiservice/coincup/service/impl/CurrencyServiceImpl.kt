@@ -28,7 +28,12 @@ class CurrencyServiceImpl(
         val userId = tokenHelper.getUserId()
         val favorites = favoriteCurrencyService.findAllByUserId(userId)
         val currencyIds = favorites.map { it.currencyId }
-        return findAll(ids = currencyIds)
+
+        return if (currencyIds.isEmpty()) {
+            emptyList()
+        } else {
+            findAll(ids = currencyIds)
+        }
     }
 
     @Transactional(readOnly = true)

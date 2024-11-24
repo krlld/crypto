@@ -22,6 +22,11 @@ class NewsServiceImpl(
     override fun findAllAboutFavoriteCurrencies(): List<NewsDto> {
         val favoriteCurrencies = currencyService.findAllFavoriteCurrencies()
         val tickers = favoriteCurrencies.map { "CRYPTO:${it.symbol}" }
-        return alphavantageFeignClient.findAllNews(tickers = tickers, apikey = apikey).feed
+
+        return if (tickers.isEmpty()) {
+            alphavantageFeignClient.findAllNews(apikey = apikey).feed
+        } else {
+            alphavantageFeignClient.findAllNews(tickers = tickers, apikey = apikey).feed
+        }
     }
 }
