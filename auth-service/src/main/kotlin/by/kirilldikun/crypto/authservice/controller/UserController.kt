@@ -76,7 +76,10 @@ class UserController(
         return profileService.update(profileDto)
     }
 
-    @PreAuthorize("hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_USERS)")
+    @PreAuthorize("""
+        hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_USERS) &&
+        hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_ROLES)
+        """)
     @PatchMapping("/reassign-roles")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun resignRoles(@RequestBody reassignRolesDto: ReassignRolesDto) {

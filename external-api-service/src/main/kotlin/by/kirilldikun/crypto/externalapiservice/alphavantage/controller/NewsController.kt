@@ -24,12 +24,10 @@ class NewsController(
         return newsService.findAll()
     }
 
-    @PreAuthorize(
-        """
+    @PreAuthorize("""
         hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_NEWS) &&
         hasAuthority(T(by.kirilldikun.crypto.commons.config.Authorities).MANAGE_CURRENCIES)
-        """
-    )
+        """)
     @GetMapping("/about-favorite-currencies")
     @ResponseStatus(HttpStatus.OK)
     fun findAllAboutFavoriteCurrencies(): List<NewsDto> {
