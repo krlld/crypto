@@ -76,7 +76,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=1234
     depends_on:
       - auth-db
-      - kafka
     ports:
       - 8081:8081
 
@@ -92,7 +91,6 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - file-db
-      - kafka
     ports:
       - 8082:8082
 
@@ -126,7 +124,6 @@ services:
       - SERVICE_AUTH_URL=http://auth-service:8081/api/auth-service
     depends_on:
       - external-api-db
-      - kafka
     ports:
       - 8084:8084
 
