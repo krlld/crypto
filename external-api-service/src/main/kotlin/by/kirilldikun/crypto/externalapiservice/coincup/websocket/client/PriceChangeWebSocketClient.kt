@@ -10,7 +10,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient
 
 @Component
 class PriceChangeWebSocketClient(
-    @Value("\${service.coin-cap.web-socket.prices.url}")
+    @Value("\${service.coincap.web-socket.prices.url}")
     val webSocketUrl: String,
     val priceChangeWebSocketHandler: PriceChangeWebSocketHandler
 ) {
