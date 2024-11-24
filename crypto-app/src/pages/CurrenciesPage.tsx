@@ -6,6 +6,7 @@ import { StarTwoTone } from '@ant-design/icons';
 import { API_URL } from '../config/constants';
 import { config } from '../config/request-config';
 import { Currency } from '../types/Currency';
+import MarkChangePercent from '../components/MarkChangePercent';
 
 interface FavoriteMap {
 	[id: string]: boolean;
@@ -14,9 +15,11 @@ interface FavoriteMap {
 const CurrenciesPage: React.FC = () => {
 	const [cryptos, setCryptos] = useState<Currency[]>([]);
 	const [favoriteMap, setFavoriteMap] = useState<FavoriteMap>({});
+	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		const fetchCryptos = async () => {
+			setLoading(true);
 			try {
 				const response = await axios.get(`${API_URL}/external-api-service/currencies`, config);
 				console.log(response);
@@ -26,6 +29,8 @@ const CurrenciesPage: React.FC = () => {
 			} catch (error) {
 				console.error('Ошибка при загрузке данных о криптовалютах:', error);
 				message.error('Не удалось загрузить данные о криптовалютах.');
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -78,6 +83,14 @@ const CurrenciesPage: React.FC = () => {
 			title: 'Symbol',
 			dataIndex: 'symbol',
 			key: 'symbol',
+			render: (text) => (
+				<img
+					src={`https://assets.coincap.io/assets/icons/${text.toLowerCase()}@2x.png`}
+					width={32}
+					height={32}
+					alt=""
+				></img>
+			),
 		},
 		{
 			title: 'Name',
@@ -88,25 +101,25 @@ const CurrenciesPage: React.FC = () => {
 			title: 'Supply',
 			dataIndex: 'supply',
 			key: 'supply',
-			render: (text) => text.toLocaleString(),
+			render: (text) => `$${text.toLocaleString()}`,
 		},
 		{
 			title: 'Max Supply',
 			dataIndex: 'maxSupply',
 			key: 'maxSupply',
-			render: (text) => (text ? text.toLocaleString() : 'N/A'),
+			render: (text) => (text ? `$${text.toLocaleString()}` : 'N/A'),
 		},
 		{
 			title: 'Market Cap (USD)',
 			dataIndex: 'marketCapUsd',
 			key: 'marketCapUsd',
-			render: (text) => text.toLocaleString(),
+			render: (text) => `$${text.toLocaleString()}`,
 		},
 		{
 			title: 'Volume (24h)',
 			dataIndex: 'volumeUsd24Hr',
 			key: 'volumeUsd24Hr',
-			render: (text) => text.toLocaleString(),
+			render: (text) => `$${text.toLocaleString()}`,
 		},
 		{
 			title: 'Price (USD)',
@@ -118,7 +131,7 @@ const CurrenciesPage: React.FC = () => {
 			title: 'Change (24h)',
 			dataIndex: 'changePercent24Hr',
 			key: 'changePercent24Hr',
-			render: (text) => `${text.toFixed(2)}%`,
+			render: (text) => <MarkChangePercent value={text.toFixed(2)} />,
 		},
 		{
 			title: 'VWAP (24h)',
@@ -144,7 +157,7 @@ const CurrenciesPage: React.FC = () => {
 	return (
 		<div style={{ padding: '20px' }}>
 			<h1>Данные о криптовалютах</h1>
-			<Table columns={columns} dataSource={cryptos} rowKey="id" />
+			<Table columns={columns} dataSource={cryptos} rowKey="id" loading={loading} />
 		</div>
 	);
 };
