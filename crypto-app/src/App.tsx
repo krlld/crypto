@@ -11,6 +11,7 @@ import CryptoSubscriptionPage from './pages/CryptoSubscriptionPage';
 import ProfilePage from './pages/ProfilePage';
 import RolesPage from './pages/RolesPage';
 import RoleAssignmentPage from './pages/RoleAssignmentPage';
+import NewsPage from './pages/NewsPage';
 
 const App: React.FC = () => {
 	const location = useLocation();
@@ -27,6 +28,7 @@ const App: React.FC = () => {
 				<Route path="/create-report" element={<ReportCreationPage />} />
 				<Route path="/currencies" element={<CurrenciesPage />} />
 				<Route path="/crypto-subscriptions" element={<CryptoSubscriptionPage />} />
+				<Route path="/news" element={<NewsPage />} />
 				<Route path="/profile" element={<ProfilePage />} />
 				<Route path="/roles" element={<RolesPage />} />
 				<Route path="/reassign-roles" element={<RoleAssignmentPage />} />

@@ -43,6 +43,11 @@ const Navbar: React.FC = () => {
 					<Link to="/crypto-subscriptions">Подписки на цены</Link>
 				</Menu.Item>
 			)}
+			{authorities.find((a) => a.name === 'MANAGE_NEWS') && (
+				<Menu.Item key="news">
+					<Link to="/news">Новости</Link>
+				</Menu.Item>
+			)}
 			<Menu.Item key="profile">
 				<Link to="/profile">Профиль</Link>
 			</Menu.Item>
