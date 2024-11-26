@@ -134,10 +134,9 @@ const ReportsPage: React.FC = () => {
 		setCurrentPage(0);
 	};
 
-	// Функция для изменения типа отчетов
 	const handleReportTypeChange = (type: 'all' | 'my' | 'favorites') => {
 		setReportType(type);
-		setCurrentPage(0); // Сбросить текущую страницу при смене типа
+		setCurrentPage(0);
 	};
 
 	return (
